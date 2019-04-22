@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_stock_quantity_history_inherit_cost" model="ir.ui.view">
+            <field name="name">view.stock.quantity.history.inherit.cost</field>
+            <field name="model">stock.quantity.history</field>
+            <field name="inherit_id" ref="stock_account.view_stock_quantity_history"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group" position="inside">
+                    <field name="warehouse_id" />
+                    <field name="location_id" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

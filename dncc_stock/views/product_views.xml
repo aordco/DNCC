@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="view_dncc_stock_product_tree" model="ir.ui.view">
+            <field name="name">product.dncc.stock.tree.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock_account.view_stock_product_tree2"/>
+            <field name="arch" type="xml">
+                <field name="qty_at_date" position="after">
+                    <field name="trivial_valuation" />
+                </field>
+            </field>
+        </record>
+
+        <record id="action_product_tree_test" model="ir.actions.act_window">
+            <field name="name">My tree</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_dncc_stock_product_tree"/>
+        </record>
+
+        <menuitem action="action_product_tree_test" id="menu_product_tree_test"
+                  parent="stock.menu_stock_inventory_control" sequence="10" />
+    </data>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_sale_payment_tree" model="ir.ui.view">
+        <field name="name">sale.payment.tree</field>
+        <field name="model">sale.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="company_id"/>
+                <field name="amount"/>
+                <field name="payment_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_payment_form" model="ir.ui.view">
+        <field name="name">sale.payment.form</field>
+        <field name="model">sale.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" name="action_make_payment" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('payment_id','=', False)]}">
+                        <!--                            <field name="picking_count" widget="statinfo"
+                                                        string="Receipt" help="Incoming Shipments"/>-->
+                        <field name="payment_id" invisible="1"/>
+                    </button>
+                    <button type="object" name="action_confirm" string="Confirm" states="draft"/>
+                    <button type="object" name="reset_draft" string="Reset to Draft" states="confirm"/>
+                    <button name="action_make_payment" type="object" states="confirm" string="Register Payment" groups="account.group_account_invoice" class="oe_highlight"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <group name="payment" string="Payment">
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="payment_date"/>
+                            <field name="amount"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="team_id" readonly="1"/>
+                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_payment_search" model="ir.ui.view">
+        <field name="name">sale.payment.search</field>
+        <field name="model">sale.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_sale_payments">
+        <field name="name">Sale Payments</field>
+        <field name="res_model">sale.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_type">form</field>
+    </record>
+    <menuitem id="sale_payment_menu"
+              name="Sale Payments"
+              parent="sale.sale_order_menu"
+              groups="sales_team.group_sale_salesman"
+              action="action_sale_payments"
+              sequence="3"/>
+
+
+
+
+</odoo>
