@@ -24,7 +24,9 @@
                 <header>
                     <button type="object" name="action_confirm" string="Confirm" states="draft"/>
                     <button type="object" name="reset_draft" string="Reset to Draft" states="confirm"/>
-                    <button name="action_make_payment" type="object" states="confirm" string="Register Payment" groups="account.group_account_invoice" class="oe_highlight"/>
+                    <button name="action_make_payment" type="object"
+                            states="confirm" string="Register Payment"
+                            groups="account.group_account_invoice" class="oe_highlight"/>
 
                     <field name="state" widget="statusbar"/>
                 </header>

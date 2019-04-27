@@ -9,4 +9,15 @@
             file="dncc_sale.report_sale_payment_receipt"
             menu="True"
     />
+
+    <report
+            id="action_report_sale_commission"
+            model="sale.commission"
+            string="Commission Report"
+            report_type="qweb-pdf"
+            name="dncc_sale.report_sale_commission"
+            file="dncc_sale.report_sale_commission"
+            menu="True"
+    />
+
 </odoo>

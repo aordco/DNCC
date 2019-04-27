@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="dncc_sale.report_sale_commission">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <t t-foreach="user_details" t-as="user">
+                        <div class="page">
+                            <h3><strong>Sales Commission: <span t-field="o.name"/></strong></h3>
+                            <div class="row mt64">
+                                <div class="col-6" >
+                                    <strong>Dates </strong> <span t-field="o.start_date"/> - <span t-field="o.end_date"/>
+                                </div>
+                                <div class="col-6" >
+                                    <strong>Salesperson </strong> <span t-esc="user['name']"/>
+                                </div>
+                            </div>
+                            <br />
+                            <!-- Details Table -->
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th><span t-esc="'Invoice'"/></th>
+                                        <th><span t-esc="'Invoice Date'"/></th>
+                                        <th><span t-esc="'Customer'"/></th>
+                                        <th><span t-esc="'Payment'"/></th>
+                                        <th><span t-esc="'Payment Date'"/></th>
+                                        <th><span t-esc="'rate'"/></th>
+                                        <th><span t-esc="'Commission'"/></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="user['lines']" t-as="line">
+                                        <td>
+                                            <span t-esc="line['invoice_id'].number"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['invoice_date']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['partner_id'].name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="format_float(line['partial_amount'], {'precision': 2})"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['payment_date']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['rate']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="format_float(line['commission_amount'], {'precision': 2})"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row mt64">
+                                <div class="col-6" >
+                                    <strong>Total Amount </strong>
+                                    <span t-esc="format_float(user['total'], {'precision': 2})"
+                                          t-esc-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </div>
+                            </div>
+                            <p style="page-break-after:always;">   </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

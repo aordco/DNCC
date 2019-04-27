@@ -108,7 +108,9 @@
               name="Sale commissions"
               parent="sale_commission_menu"
               action="action_sale_commissions"
-              sequence="3"/>
+              sequence="3"
+              groups="account.group_account_invoice"
+                />
 
 
 
