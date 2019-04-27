@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sale_payment_user,access.sale.payment.user,model_sale_payment,sales_team.group_sale_salesman,1,1,1,1
 access_sale_payment_account_user,access.sale.payment.account.user,model_sale_payment,account.group_account_invoice,1,1,1,1
+access_sale_commission_account_user,access.sale.commission.account.user,model_sale_commission,account.group_account_invoice,1,1,1,1
+access_partial_payment_account_user,access.partial.payment.account.user,model_partial_payment,account.group_account_invoice,1,1,1,1

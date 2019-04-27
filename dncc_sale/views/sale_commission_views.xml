@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_sale_commission_tree" model="ir.ui.view">
+        <field name="name">sale.commission.tree</field>
+        <field name="model">sale.commission</field>
+        <field name="arch" type="xml">
+            <tree decoration-bf="state=='draft'" decoration-muted="state=='settle'">
+                <field name="name" />
+                <field name="state" />
+                 <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_commission_form" model="ir.ui.view">
+        <field name="name">sale.commission.form</field>
+        <field name="model">sale.commission</field>
+        <field name="arch" type="xml">
+            <form string="Commissions">
+                <header>
+                    <button name="action_confirm" string="Compute Payments" type="object" states="draft"/>
+                     <button name="reset_draft" string="Reset To Draft" type="object" states="confirm"/>
+                    <button name="%(dncc_sale.action_settle_commission)d" type="action" states="confirm" string="Generate Invoices" />
+                     <field name="state" string="State" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"  name="action_view_invoice"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':['|', ('settle_invoices_count', '=', 0), ('state', 'in', ('draft', 'confirm'))]}">
+                            <field name="settle_invoices_count" widget="statinfo" string="Settlement Bills"/>
+                            <field name='settle_invoices' invisible="1"/>
+                        </button>
+                    </div>
+                    <group name="commission" string="Commission">
+                        <group>
+                            <field name="name"  default_focus="1"/>
+                            <field name="start_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="end_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
+                        </group>
+                        <group>
+                            <field name="cover" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="team_id" options="{'no_create': True}"
+                                   attrs="{'required': [('cover', '=', 'team')], 'invisible': [('cover', '!=', 'team')], 'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="user_id" options="{'no_create': True}"
+                                   attrs="{'required': [('cover', '=', 'person')],'invisible': [('cover', '!=', 'person')], 'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Payments" name="payments" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <group>
+                                <field name="partial_payments" nolabel="1">
+                                    <tree editable="top">
+                                        <field name="invoice_id" />
+                                        <field name="partner_id" />
+                                        <field name="invoice_date" />
+                                        <field name="payment_date" />
+                                        <field name="partial_amount"/>
+                                        <field name="rate" />
+                                        <field name="commission_amount"/>
+                                        <field name="user_id"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Invoices" name="invoices" attrs="{'invisible': [('state', '!=', 'draft')]}">
+                            <group>
+                                <field name="invoice_ids" nolabel="1"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_commission_search" model="ir.ui.view">
+        <field name="name">sale.commission.search</field>
+        <field name="model">sale.commission</field>
+        <field name="arch" type="xml">
+            <search>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_sale_commissions">
+        <field name="name">Sale commissions</field>
+        <field name="res_model">sale.commission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_type">form</field>
+    </record>
+
+    <menuitem id="sale_commission_menu"
+              name="Commissions"
+              parent="sale.sale_menu_root"
+              sequence="5"/>
+
+    <menuitem id="sale_commission_menu_action"
+              name="Sale commissions"
+              parent="sale_commission_menu"
+              action="action_sale_commissions"
+              sequence="3"/>
+
+
+
+
+</odoo>

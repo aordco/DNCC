@@ -7,21 +7,25 @@ from odoo.exceptions import UserError, AccessError
 
 class SalePayment(models.Model):
     _name = "sale.payment"
+    _description = "Sales Payment"
+    _order = "payment_date desc, name desc"
 
     @api.model
     def _get_default_team(self):
         return self.env['crm.team']._get_default_team_id()
 
-    name = fields.Char("Name", readonly=True, default="/")
+    name = fields.Char("Name", readonly=True, default="/", copy=False, index=True)
     payment_date = fields.Date(string='Payment Date', default=fields.Date.context_today,
-                               required=True, copy=False)
+                               required=True, copy=False, index=True)
     partner_id = fields.Many2one("res.partner", string="Customer",
-                                 domain=[('customer', '=', True)], required=True)
+                                 domain=[('customer', '=', True)], required=True, copy=False)
     amount = fields.Monetary(string='Payment Amount', required=True)
     currency_id = fields.Many2one(related="company_id.currency_id",
                                   string='Currency', readonly=False)
-    payment_id = fields.Many2one("account.payment", string="Accounting payment")
-    team_id = fields.Many2one('crm.team', string='Sales Team', default=_get_default_team, oldname='section_id')
+    payment_id = fields.Many2one("account.payment", string="Accounting payment", copy=False)
+    team_id = fields.Many2one('crm.team', string='Sales Team', default=_get_default_team, oldname='section_id', copy=False)
+    user_id = fields.Many2one('res.users', string='Salesman', default=lambda self: self.env.user,
+                              copy=False)
     company_id = fields.Many2one('res.company', string='Company',
                                  readonly=True,
                                  default=lambda self: self.env['res.company']._company_default_get())
@@ -45,14 +49,16 @@ class SalePayment(models.Model):
 
     @api.multi
     def action_make_payment(self):
-        action = self.env.ref('account.action_account_invoice_payment')
-        result = action.read()[0]
         if not self.payment_id:
+            action = self.env.ref('account.action_account_invoice_payment')
+            result = action.read()[0]
+            result['context'] = {}
             result['context'] = {
                     'default_partner_id': self.partner_id.id,
                     'default_partner_type': 'customer',
                     'default_payment_type': 'inbound',
-                    'default_amount': 8056,
+                    # 'default_amount': float(8056.56),
+                    'default_currency_id': self.currency_id.id,
                     'default_communication': self.name,
                     'default_payment_date': self.payment_date,
                     'sale_payment': True,

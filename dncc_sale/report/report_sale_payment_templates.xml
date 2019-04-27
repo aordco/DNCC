@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="dncc_sale.report_sale_payment_receipt_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+            <div class="page">
+                <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
+                <div class="row mt64">
+                    <div class="col-6" t-if="o.payment_date">
+                        <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <strong>Customer: </strong>
+                        <span t-field="o.partner_id"/>
+                    </div>
+                </div>
+                <div class="row mb64">
+                    <div class="col-6" t-if="o.amount">
+                        <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                    </div>
+                </div>
+                <div class="row mb64">
+                    <div class="col-6" t-if="o.amount">
+                        <strong>Received By: </strong><span t-field="o.user_id" />
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="dncc_sale.report_sale_payment_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+                <t t-call="dncc_sale.report_sale_payment_receipt_document" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

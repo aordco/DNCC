@@ -1,0 +1,12 @@
+<odoo>
+
+    <report
+            id="action_report_sale_payment_receipt"
+            model="sale.payment"
+            string="Payment Receipt"
+            report_type="qweb-pdf"
+            name="dncc_sale.report_sale_payment_receipt"
+            file="dncc_sale.report_sale_payment_receipt"
+            menu="True"
+    />
+</odoo>

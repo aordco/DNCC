@@ -8,9 +8,10 @@
             <tree>
                 <field name="name"/>
                 <field name="partner_id"/>
-                <field name="company_id"/>
                 <field name="amount"/>
-                <field name="payment_id"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+
             </tree>
         </field>
     </record>
@@ -21,11 +22,6 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button type="object" name="action_make_payment" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('payment_id','=', False)]}">
-                        <!--                            <field name="picking_count" widget="statinfo"
-                                                        string="Receipt" help="Incoming Shipments"/>-->
-                        <field name="payment_id" invisible="1"/>
-                    </button>
                     <button type="object" name="action_confirm" string="Confirm" states="draft"/>
                     <button type="object" name="reset_draft" string="Reset to Draft" states="confirm"/>
                     <button name="action_make_payment" type="object" states="confirm" string="Register Payment" groups="account.group_account_invoice" class="oe_highlight"/>
@@ -34,17 +30,26 @@
                 </header>
 
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_make_payment"
+                                class="oe_stat_button" icon="fa-money"
+                                attrs="{'invisible':[('payment_id','=', False)]}">
+                            <span class="o_stat_text"> Payments</span>
+                            <field name="payment_id" invisible="1"/>
+                        </button>
+                    </div>
                     <group name="payment" string="Payment">
                         <group>
                             <field name="name"/>
-                            <field name="partner_id"/>
+                            <field name="partner_id" attrs="{'readonly':[('state','!=', 'draft')]}"/>
                         </group>
                         <group>
-                            <field name="payment_date"/>
-                            <field name="amount"/>
+                            <field name="payment_date" attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                            <field name="amount" attrs="{'readonly':[('state','!=','draft')]}"/>
                         </group>
                     </group>
                     <group>
+                        <field name="user_id" readonly="1" />
                         <field name="team_id" readonly="1"/>
                         <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                     </group>
