@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <odoo>
 
+    <record id="action_account_sale_payment" model="ir.actions.act_window">
+        <field name="name">Register Payment</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account.view_account_payment_invoice_form"/>
+        <field name="context">{'default_amount': 8550}</field>
+        <field name="target">new</field>
+    </record>
+
     <record id="view_sale_payment_tree" model="ir.ui.view">
         <field name="name">sale.payment.tree</field>
         <field name="model">sale.payment</field>
@@ -48,6 +58,7 @@
                         <group>
                             <field name="payment_date" attrs="{'readonly':[('state','!=', 'draft')]}"/>
                             <field name="amount" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="payment_method" attrs="{'readonly':[('state','!=','draft')]}" />
                         </group>
                     </group>
                     <group>

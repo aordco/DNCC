@@ -3,6 +3,20 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, AccessError
+from odoo.addons.account.models.account_payment import MAP_INVOICE_TYPE_PARTNER_TYPE
+
+
+class AccountInvoice(models.Model):
+    _inherit = "account.invoice"
+
+    # only for vendor bills, source document is commission
+    commission_id = fields.Many2one("sale.commission", string="Sale Commission")
+
+    # commissioned, for customer invoices to avoid re-issuing commissions
+    comm_settle = fields.Boolean(string="Commission Settled", readonly=True)
+
+###################################################
+
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
@@ -26,3 +40,15 @@ class AccountPayment(models.Model):
                 }
                 sale_payment.write(vals)
         super(AccountPayment, self).post()
+
+###############################################
+
+
+class AccountAbstractPayment(models.AbstractModel):
+    _inherit = "account.abstract.payment"
+
+    @api.onchange('currency_id')
+    def _onchange_currency(self):
+        if not self._context.get("sale_payment", False):
+            self.amount = abs(self._compute_payment_amount())
+        else: self.amount = abs(self.amount)

@@ -1,31 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- JS assets -->
+    <!--    <template id="assets_backend" inherit_id="web.assets_backend" name="Sale Payment Assets">-->
+    <!--        <xpath expr="." position="inside">-->
+    <!--            <link rel="stylesheet" href="/dncc_sale/static/src/css/dncc_sale.css"/>-->
+    <!--        </xpath>-->
+    <!--    </template>-->
     <template id="dncc_sale.report_sale_payment_receipt_document">
         <t t-call="web.external_layout">
             <t t-set="o" t-value="o.with_context({'lang': lang})"/>
             <div class="page">
-                <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
-                <div class="row mt64">
-                    <div class="col-6" t-if="o.payment_date">
-                        <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
-                    </div>
-                </div>
-                <div class="row">
+                <style>
+                    table {
+                    color: #333; /* Lighten up font color */
+                    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+                    width: 640px;
+                    border-collapse:
+                    collapse; border-spacing: 0;
+                    text-align:center;
+                    margin-left:auto;
+                    margin-right:auto;
+                    }
+
+                    td, th { border: 1px solid #CCC; height: 30px; } /* Make cells a bit taller */
+
+                    th {
+                    background: #F3F3F3; /* Light grey background */
+                    font-weight: bold; /* Make sure they're bold */
+                    }
+
+                    td {
+                    background: #FAFAFA; /* Lighter grey background */
+                    text-align: center; /* Center our text */
+                    }
+                </style>
+                <h3 class="text-center"><strong>Payment Receipt</strong></h3>
+                <h3 class="text-center"><strong>سند قبض </strong></h3>
+                <br/>
+                <div class="row mb4">
                     <div class="col-6">
-                        <strong>Customer: </strong>
-                        <span t-field="o.partner_id"/>
+                        <strong>Date: </strong> <span t-field="o.payment_date"/>
+                    </div>
+                    <!--                    <div class="col-6 text-right" >-->
+                    <!--                        <strong>Number: </strong> <span t-field="o.name"/>-->
+                    <!--                    </div>-->
+                </div>
+                <div class="row mb4">
+<!--                    <div class="col-6">-->
+<!--                        <strong>Date: </strong> <span t-field="o.payment_date"/>-->
+<!--                    </div>-->
+                    <div class="col-6" >
+                        <strong>Number: </strong> <span t-field="o.name"/>
                     </div>
                 </div>
-                <div class="row mb64">
-                    <div class="col-6" t-if="o.amount">
-                        <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
-                    </div>
-                </div>
-                <div class="row mb64">
-                    <div class="col-6" t-if="o.amount">
-                        <strong>Received By: </strong><span t-field="o.user_id" />
-                    </div>
-                </div>
+                <br/>
+                <table >
+                    <tr>
+                        <th>Received From</th>
+                        <td> <span t-field="o.partner_id"/></td>
+                        <th>Received From</th>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                        <th>Amount</th>
+                    </tr>
+                    <tr>
+                        <th>Payment Method</th>
+                        <td><span t-field="o.payment_method" /></td>
+                        <th>Payment Method</th>
+                    </tr>
+                </table>
+                <br />
+                <br />
+                <p >
+                        Payment Received By : <b><span t-field="o.user_id"/></b>
+                    </p>
             </div>
         </t>
     </template>

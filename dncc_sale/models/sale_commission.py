@@ -8,18 +8,6 @@ from odoo.exceptions import UserError, AccessError, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
-
-    # only for vendor bills, source document is commission
-    commission_id = fields.Many2one("sale.commission", string="Sale Commission")
-
-    # commissioned, for customer invoices to avoid re-issuing commissions
-    comm_settle = fields.Boolean(string="Commission Settled", readonly=True)
-
-###################################################
-
-
 class SaleCommission(models.Model):
     _name = "sale.commission"
     _description = "Sales Commissions"

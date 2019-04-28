@@ -10,6 +10,12 @@ class SalePayment(models.Model):
     _description = "Sales Payment"
     _order = "payment_date desc, name desc"
 
+    METHOD_SEL = [
+        ('cash', 'Cash'),
+        ('check', 'Check'),
+        ('transfer', 'Transfer'),
+    ]
+
     @api.model
     def _get_default_team(self):
         return self.env['crm.team']._get_default_team_id()
@@ -29,6 +35,7 @@ class SalePayment(models.Model):
     company_id = fields.Many2one('res.company', string='Company',
                                  readonly=True,
                                  default=lambda self: self.env['res.company']._company_default_get())
+    payment_method = fields.Selection(METHOD_SEL, string="Payment Method", default="cash", required=True)
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('process', 'Processed')],
                              readonly=True, default='draft',
                              copy=False, string="Status")
@@ -50,14 +57,15 @@ class SalePayment(models.Model):
     @api.multi
     def action_make_payment(self):
         if not self.payment_id:
-            action = self.env.ref('account.action_account_invoice_payment')
+            action = self.env.ref('dncc_sale.action_account_sale_payment')
             result = action.read()[0]
             result['context'] = {}
             result['context'] = {
                     'default_partner_id': self.partner_id.id,
                     'default_partner_type': 'customer',
                     'default_payment_type': 'inbound',
-                    # 'default_amount': float(8056.56),
+                    'default_invoice_ids': False,
+                    'default_amount': self.amount,
                     'default_currency_id': self.currency_id.id,
                     'default_communication': self.name,
                     'default_payment_date': self.payment_date,
@@ -73,7 +81,6 @@ class SalePayment(models.Model):
             result['views'] = [(res and res.id or False, 'form')]
             result['res_id'] = self.payment_id.id
         return result
-
 
     # ORM functions
 
