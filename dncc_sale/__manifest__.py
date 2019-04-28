@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
-    'name': 'DNCC Sale Customization ',
+    'name': 'DNCC Sale Customization',
     'version': '1.1',
     'category': 'sale',
     'sequence': 35,
