@@ -177,15 +177,15 @@ class PartialPayment(models.Model):
             raise UserError(_('Wrong python code defined for tax deduction'))
 
     def get_commission_percent(self):
-        if self.company_id.comiss_delay_days >= 0:
-            days_diff = (self.payment_date - self.invoice_date).days
-            delay_days = self.company_id.comiss_delay_days
-            if days_diff <= delay_days:
-                rate = self.company_id.commission
-            else:
-                rate = self.company_id.commission_part
-        else:
-            rate = self.company_id.commission
+        # if self.company_id.comiss_delay_days >= 0:
+        #     days_diff = (self.payment_date - self.invoice_date).days
+        #     delay_days = self.company_id.comiss_delay_days
+        #     if days_diff <= delay_days:
+        #         rate = self.company_id.commission
+        #     else:
+        #         rate = self.company_id.commission_part
+        # else:
+        rate = self.company_id.commission
         return rate
 
     @api.depends("partial_amount")
